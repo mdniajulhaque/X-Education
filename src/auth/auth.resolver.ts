@@ -1,11 +1,12 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { CreateUserInput } from 'src/users/dto/create-user.input';
+
 import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { LoginResponse } from './dto/login-response';
-import { LoginUserInput } from './dto/login-user.input';
+import { LoginAdminInput } from './dto/login-admin.input';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
+import { CreateAdminInput } from 'src/users/dto';
 
 @Resolver()
 export class AuthResolver {
@@ -13,12 +14,17 @@ export class AuthResolver {
 
   @Mutation(() => LoginResponse)
   @UseGuards(GqlAuthGuard)
-  async login(@Args('loginUserInput') loginUserInput: LoginUserInput) {
-    return this.authService.login(loginUserInput);
+  async loginAdmin(@Args('loginAdminInput') loginAdminInput: LoginAdminInput) {
+    return await this.authService.loginAdmin(loginAdminInput);
   }
 
+
   @Mutation(() => User)
-  signup(@Args('signupUserInput') signupUserInput: CreateUserInput) {
-    return this.authService.signup(signupUserInput);
+  async createAdmin(
+    @Args('createAdminInput') createAdminInput: CreateAdminInput,
+  ): Promise<User> {
+    return await this.authService.createAdmin(createAdminInput);
   }
+
+
 }

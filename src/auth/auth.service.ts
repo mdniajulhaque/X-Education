@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserInput } from 'src/users/dto/create-user.input';
-import { LoginUserInput } from './dto/login-user.input';
+
+import { LoginAdminInput } from './dto/login-admin.input';
+import { CreateAdminInput } from 'src/users/dto';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +15,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findOneUser(email);
     const valid = user && (await bcrypt.compare(password, user?.password));
 
     if (user && valid) {
@@ -24,32 +26,21 @@ export class AuthService {
     return null;
   }
 
-  async login(loginUserInput: LoginUserInput) {
-    const user = await this.usersService.findOne(loginUserInput.email);
-    const { password, ...result } = user;
+  async loginAdmin(loginAdminInput: LoginAdminInput) {
+    const adminInfo = await this.usersService.findOneUser(loginAdminInput.email);
 
     return {
       access_token: this.jwtService.sign({
-        email: user.email,
-        sub: user.id,
-        role: user.role,
+        email: adminInfo.email,
+        role: adminInfo.role,
       }),
-      user: result,
+      user: adminInfo,
     };
   }
 
-  async signup(signupUserInput: CreateUserInput) {
-    const user = await this.usersService.findOne(signupUserInput.email);
 
-    if (user) {
-      throw new Error('User already exists');
-    }
-
-    const password = await bcrypt.hash(signupUserInput.password, 10);
-
-    return this.usersService.create({
-      ...signupUserInput,
-      password,
-    });
+  async createAdmin(createAdminInput: CreateAdminInput) {
+   return await this.usersService.createAdmin(createAdminInput)
   }
+
 }

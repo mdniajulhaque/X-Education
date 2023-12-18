@@ -6,5 +6,6 @@ async function bootstrap() {
     cors: true,
   });
   await app.listen(4000);
+  console.log("http://localhost:4000/graphql")
 }
 bootstrap();

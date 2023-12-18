@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput, deleteUserInput } from './dto/create-user.input';
+import { CreateAdminInput } from './dto/create-admin.input';
 import Role from 'src/enums/roles.enum';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UseGuards } from '@nestjs/common';
@@ -42,24 +42,15 @@ export class UsersResolver {
 
   @Query(() => User, { name: 'user' })
   findOne(@Args('email') email: string): Promise<User> {
-    return this.usersService.findOne(email);
+    return this.usersService.findOneUser(email);
   }
 
-  @Mutation(() => User)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN,Role.BRAND)
-  createforAdminandBrand(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<User> {
-    return this.usersService.create(createUserInput);
-  }
-
-@Mutation(() => User)
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN)
-async deleteOnlyforAdmin(@Args('deleteUserInput') deleteUserInput: deleteUserInput) 
-  {
-  return await this.usersService.delete(deleteUserInput.id);
-}
+// @Mutation(() => User)
+// @UseGuards(JwtAuthGuard, RolesGuard)
+// @Roles(Role.ADMIN)
+// async deleteOnlyforAdmin(@Args('deleteUserInput') deleteUserInput: deleteUserInput) 
+//   {
+//   return await this.usersService.delete(deleteUserInput.id);
+// }
 
 }

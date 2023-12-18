@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, ResolveProperty } from '@nestjs/graphql';
+import { ObjectType, Field} from '@nestjs/graphql';
 import Role from 'src/enums/roles.enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
@@ -8,28 +8,23 @@ export type UserDocument = User & Document;
 @ObjectType()
 export class User {
 
-  @Prop()
-  @Field(() => Int)
-  id: Number;
-
-  @Prop()
-  @Field()
+  @Prop({type:String,required:true})
+  @Field(()=>String)
   email: string;
 
-  @Prop()
-  @Field()
-  username: string;
-
-  @Prop()
-  @Field()
+  @Prop({type:String,required:true})
   password: string;
+
+  @Prop({type:String})
+  @Field(() => String,{nullable:true})
+  username?: string;
 
   @Prop({
     type: String,
     enum: Role,
     default: Role.USER,
   })
-  @Field()
+  @Field(() => String)
   role: Role;
 }
 
