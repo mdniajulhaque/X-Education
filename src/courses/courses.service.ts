@@ -1,22 +1,22 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from './entities/user.entity';
+import { Course, CourseDocument } from './entities/course.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateAdminInput } from './dto';
 import Role from 'src/enums/roles.enum';
 
 @Injectable()
-export class UsersService {
+export class CoursesService {
   constructor(
-    @InjectModel(User.name)  private userModel: Model<UserDocument>
+    @InjectModel(Course.name)  private userModel: Model<CourseDocument>
   ) {}
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<Course[]> {
     return this.userModel.find().exec();
   }
 
-  async findOneUser(email: string): Promise<User> {
+  async findOneUser(email: string): Promise<Course> {
     return await this.userModel.findOne({ email }).exec();
   }
   
@@ -34,7 +34,7 @@ export class UsersService {
   }
 
 
-  async delete(deleteUser:string):Promise<User> {
+  async delete(deleteUser:string):Promise<Course> {
     const user = await this.userModel.findByIdAndDelete(deleteUser);
     return user;
   }
