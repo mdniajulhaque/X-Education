@@ -16,9 +16,9 @@ export class CreateCourse {
   @Field(()=>String)
   description: string;
 
-  // @Prop({type:CoursePrice,required:true})
-  // @Field(() => CoursePrice,{nullable:true})
-  // price?: CoursePrice;
+  @Prop({type:CoursePrice,required:true})
+  @Field(() => CoursePrice,{nullable:true})
+  price?: CoursePrice;
 
 
   @Prop({type:String})

@@ -8,6 +8,10 @@ export type UserDocument = User & Document;
 @ObjectType()
 export class User {
 
+  @Field(()=>String,{nullable:true})
+  _id?: string;
+
+
   @Prop({type:String,required:true})
   @Field(()=>String)
   email: string;

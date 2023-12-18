@@ -1,13 +1,13 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { CoursesService } from '../services/courses.service';
 import { Course } from '../entities/course.entity';
-import { CreateAdminInput } from '../dto/create-admin.input';
 import Role from 'src/auth/enums/roles.enum';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreateCourse } from '../entities';
+import { CurrentUser } from 'src/auth/decorators';
 
 @Resolver(() => Course)
 export class CoursesResolver {
@@ -18,9 +18,11 @@ export class CoursesResolver {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   async createCourse(
-    @Args('createCourse') createCourse:CreateCourse
+    @Args('createCourse') createCourse:CreateCourse,
+    @CurrentUser('userData') userData: any
   ): Promise<Course> {
-    return await this.coursesService.createCourse(createCourse);
+    
+    return await this.coursesService.createCourse(createCourse,userData.userId);
   }
 
 

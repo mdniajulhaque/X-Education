@@ -11,7 +11,7 @@ export class CoursePrice {
   @Field(() => Int, { defaultValue: 0 })
   amount: number;
 
-  @Prop({ type: Currency, required: true })
-  @Field(() => Currency, { defaultValue: 0 })
+  @Prop({ type: String, enum:Currency, required: true })
+  @Field(() => Currency)
   currency: Currency;
 }
