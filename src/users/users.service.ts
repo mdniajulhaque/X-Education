@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateAdminInput } from './dto';
-import Role from 'src/enums/roles.enum';
+import Role from 'src/auth/enums/roles.enum';
 
 @Injectable()
 export class UsersService {

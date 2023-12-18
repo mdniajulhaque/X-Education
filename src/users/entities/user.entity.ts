@@ -1,5 +1,5 @@
 import { ObjectType, Field} from '@nestjs/graphql';
-import Role from 'src/enums/roles.enum';
+import Role from 'src/auth/enums/roles.enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
