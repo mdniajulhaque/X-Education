@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  email: String!
+  username: String!
+  password: String!
+  role: String!
+}
+
+type LoginResponse {
+  access_token: String!
+  user: User!
+}
+
+type Query {
+  foradmin: [User!]!
+  forbrand: [User!]!
+  users: [User!]!
+  user(email: String!): User!
+}
+
+type Mutation {
+  createforAdminandBrand(createUserInput: CreateUserInput!): User!
+  deleteOnlyforAdmin(deleteUserInput: deleteUserInput!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  signup(signupUserInput: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  id: Float!
+  email: String!
+  username: String!
+  password: String!
+}
+
+input deleteUserInput {
+  id: String!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
