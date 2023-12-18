@@ -15,9 +15,9 @@ export class CourseSchedule {
   @Field(() => Date)
   endDate: Date;
 
-  @Prop({ type: [ClassDays], required: true })
-  @Field(() => [ClassDays])
-  classDays: ClassDays[];
+  // @Prop({ type: [ClassDays], required: true })
+  // @Field(() => [ClassDays])
+  // classDays: ClassDays[];
 
   @Prop({ type: String, required: true })
   @Field(() => String)
