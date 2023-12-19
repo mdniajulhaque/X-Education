@@ -56,6 +56,15 @@ export class CoursesService {
       throw new NotFoundException('Course Not Found' + error);
     }
   }
+
+
+  async deleteCourse(courseId: string): Promise<Course> {
+    try {
+      return await this.courseModel.findByIdAndDelete(courseId);
+    } catch (error) {
+      throw new InternalServerErrorException('Course Cannot Delete ' + error);
+    }
+  }
   // async delete(deleteUser:string):Promise<Course> {
   //   const user = await this.userModel.findByIdAndDelete(deleteUser);
   //   return user;

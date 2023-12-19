@@ -33,7 +33,7 @@ export class CoursesResolver {
   async allCourseList(
     @Args('paginationInput') paginationInput: PaginationInput,
   ): Promise<AllCoursesList> {
-    
+
     return await this.coursesService.allCourseList(paginationInput);
   }
 
@@ -43,5 +43,13 @@ export class CoursesResolver {
   async getCourseById(@Args('courseId') courseId: string): Promise<Course> {
 
     return await this.coursesService.getCourseById(courseId);
+  }
+
+  @Mutation(() => Course)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async deleteCourse(@Args('courseId') courseId: string): Promise<Course> {
+
+    return await this.coursesService.deleteCourse(courseId);
   }
 }
