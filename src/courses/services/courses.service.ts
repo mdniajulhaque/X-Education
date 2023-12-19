@@ -1,9 +1,10 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel, Schema } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Course, CourseDocument } from '../entities/course.entity';
 import { CreateCourse } from '../entities';
 import { ObjectId } from "mongodb";
+import { AllCoursesList, PaginationInput } from '../dto';
 @Injectable()
 export class CoursesService {
   constructor(
@@ -20,6 +21,33 @@ export class CoursesService {
     }catch(error)
     {
       throw new InternalServerErrorException("Course Cannot Created " + error);
+      
+    }
+  
+  }
+
+  async allCourseList(paginationInput:PaginationInput): Promise<AllCoursesList> {
+    try{
+      const {perPage, pageNumber} = paginationInput
+
+      const skip = (pageNumber - 1 ) * perPage
+
+      const coursesList = await this.courseModel.aggregate([
+        {
+          $skip:skip
+        },
+        {
+          $limit:perPage
+        }
+      ])
+    const totalCourse = await this.courseModel.countDocuments();
+    const response = { coursesList, totalCourse };
+    
+    return response;
+
+    }catch(error)
+    {
+      throw new NotFoundException("Course Not Found" + error);
       
     }
   

@@ -8,6 +8,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreateCourse } from '../entities';
 import { CurrentUser } from 'src/auth/decorators';
+import { AllCoursesList, PaginationInput } from '../dto';
 
 @Resolver(() => Course)
 export class CoursesResolver {
@@ -25,7 +26,14 @@ export class CoursesResolver {
     return await this.coursesService.createCourse(createCourse,userData.userId);
   }
 
-
-  
+  @Query(() => AllCoursesList)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async allCourseList(
+    @Args('paginationInput') paginationInput:PaginationInput
+  ): Promise<AllCoursesList> {
+    
+    return await this.coursesService.allCourseList(paginationInput);
+  }
 
 }
