@@ -14,26 +14,34 @@ import { AllCoursesList, PaginationInput } from '../dto';
 export class CoursesResolver {
   constructor(private readonly coursesService: CoursesService) {}
 
-
   @Mutation(() => Course)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   async createCourse(
-    @Args('createCourse') createCourse:CreateCourse,
-    @CurrentUser('userData') userData: any
+    @Args('createCourse') createCourse: CreateCourse,
+    @CurrentUser('userData') userData: any,
   ): Promise<Course> {
-    
-    return await this.coursesService.createCourse(createCourse,userData.userId);
+    return await this.coursesService.createCourse(
+      createCourse,
+      userData.userId,
+    );
   }
 
   @Query(() => AllCoursesList)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   async allCourseList(
-    @Args('paginationInput') paginationInput:PaginationInput
+    @Args('paginationInput') paginationInput: PaginationInput,
   ): Promise<AllCoursesList> {
     
     return await this.coursesService.allCourseList(paginationInput);
   }
 
+  @Query(() => Course)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async getCourseById(@Args('courseId') courseId: string): Promise<Course> {
+
+    return await this.coursesService.getCourseById(courseId);
+  }
 }
