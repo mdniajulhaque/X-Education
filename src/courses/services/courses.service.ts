@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { Course, CourseDocument } from '../entities/course.entity';
 import { CreateCourse } from '../entities';
 import { ObjectId } from "mongodb";
-import { AllCoursesList, PaginationInput, UpdateCourseInput } from '../dto';
+import { AllCoursesList, CreateCourseResponse, PaginationInput, UpdateCourseInput } from '../dto';
 
 @Injectable()
 export class CoursesService {
@@ -15,11 +15,14 @@ export class CoursesService {
   async createCourse(
     createCourse: CreateCourse,
     adminUserId: string,
-  ): Promise<Course> {
+  ): Promise<CreateCourseResponse> {
     try {
-      createCourse['creatorAdminUserId'] = new ObjectId(adminUserId);
+     createCourse['creatorAdminUserId'] = new ObjectId(adminUserId);
 
-      return await this.courseModel.create(createCourse);
+     const newCourse = await this.courseModel.create(createCourse);
+   
+    return {newCourse,success : true,message :"The course has been added successfully"}
+
     } catch (error) {
       throw new InternalServerErrorException('Course Cannot Created ' + error);
     }
