@@ -1,10 +1,11 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { InjectModel, Schema } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Course, CourseDocument } from '../entities/course.entity';
 import { CreateCourse } from '../entities';
 import { ObjectId } from "mongodb";
-import { AllCoursesList, PaginationInput } from '../dto';
+import { AllCoursesList, PaginationInput, UpdateCourseInput } from '../dto';
+
 @Injectable()
 export class CoursesService {
   constructor(
@@ -57,6 +58,16 @@ export class CoursesService {
     }
   }
 
+  async updateCourse(updateCourseInput: UpdateCourseInput,adminUserId:string): Promise<Course> {
+    try {
+      const {courseId,...updateField} = updateCourseInput
+      updateField['editorAdminUserId'] = new ObjectId(adminUserId)
+      return await this.courseModel.findByIdAndUpdate(courseId,updateField,{new:true});
+    } catch (error) {
+      throw new InternalServerErrorException('Course Cannot Updated ' + error);
+    }
+  }
+
 
   async deleteCourse(courseId: string): Promise<Course> {
     try {
@@ -65,8 +76,4 @@ export class CoursesService {
       throw new InternalServerErrorException('Course Cannot Delete ' + error);
     }
   }
-  // async delete(deleteUser:string):Promise<Course> {
-  //   const user = await this.userModel.findByIdAndDelete(deleteUser);
-  //   return user;
-  // }
 }

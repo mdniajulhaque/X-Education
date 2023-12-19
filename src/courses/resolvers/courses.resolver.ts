@@ -8,7 +8,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreateCourse } from '../entities';
 import { CurrentUser } from 'src/auth/decorators';
-import { AllCoursesList, PaginationInput } from '../dto';
+import { AllCoursesList, PaginationInput, UpdateCourseInput } from '../dto';
 
 @Resolver(() => Course)
 export class CoursesResolver {
@@ -48,8 +48,19 @@ export class CoursesResolver {
   @Mutation(() => Course)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
+  async updateCourse(
+    @Args('updateCourseInput') updateCourseInput: UpdateCourseInput,
+    @CurrentUser('userData') userData: any,
+    ): Promise<Course> {
+
+    return await this.coursesService.updateCourse(updateCourseInput,userData.userId,);
+  }
+
+  @Mutation(() => Course)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   async deleteCourse(@Args('courseId') courseId: string): Promise<Course> {
 
-    return await this.coursesService.deleteCourse(courseId);
+  return await this.coursesService.deleteCourse(courseId);
   }
 }
