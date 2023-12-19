@@ -4,14 +4,14 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
+
 @Schema()
 @ObjectType()
 export class User {
 
   @Field(()=>String,{nullable:true})
   _id?: string;
-
-
+  
   @Prop({type:String,required:true})
   @Field(()=>String)
   email: string;

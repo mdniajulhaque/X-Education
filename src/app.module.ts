@@ -6,25 +6,20 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CoursesModule } from './courses/courses.module';
-
+import 'dotenv/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/X-EDUCATION'),
+    MongooseModule.forRoot(process.env.MONGO_DB_URL),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      //sortSchema: true,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql')
     }),
-    // Add your database connection here
-    // This example uses TypeORM with a postgres database
-    
     CoursesModule,
     UsersModule,
     AuthModule,
